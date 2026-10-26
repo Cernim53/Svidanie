@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Созвонимся? ☕✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="top-controls">
+    <button class="ctrl-btn" onclick="copyLinkForShare()">
+      🔗 Ссылка
+    </button>
+    <button class="ctrl-btn" onclick="toggleMusic()">
+      <span id="musicIcon">🎵</span> <span id="musicText">Lofi: Выкл</span>
+    </button>
+    <button class="ctrl-btn" onclick="nextTheme()">
+      🎨 Атмосфера
+    </button>
+  </div>
+
+  <div class="card">
+    
+    <!-- ШАГ 1: БАГЗ БАННИ -->
+    <div id="step1" class="step active">
+      <div class="media-box">
+        <img src="assets/bugs.gif" alt="Bugs Bunny Heart">
+      </div>
+      <h1>Созвонимся вечером на чашку чая или онлайн-вечер? ☕✨</h1>
+      <p class="subtitle">Хоть нас и разделяет расстояние, хочу провести с тобой время!</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="yesBtn" onclick="goToStep(2)">Давай! 💫</button>
+        <button class="btn btn-secondary" id="noBtn" onclick="handleNoClick()">Не сегодня</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 2: ОБЩИЙ ВЫБОР -->
+    <div id="step2" class="step">
+      <h1>Чем займёмся на созвоне? 🎯</h1>
+      <p class="subtitle">Выбери интересные направления:</p>
+      
+      <div class="grid-options">
+        <div class="option-card" onclick="toggleMainOption(this, 'movies')">
+          <span class="option-title">🎬 Фильм / Аниме</span>
+          <span class="option-desc">Совместный просмотр</span>
+        </div>
+        <div class="option-card" onclick="toggleMainOption(this, 'games')">
+          <span class="option-title">🎮 Онлайн-игры</span>
+          <span class="option-desc">Кооператив и пати-игры</span>
+        </div>
+        <div class="option-card" onclick="toggleMainOption(this, 'music')">
+          <span class="option-title">🎵 Музыка</span>
+          <span class="option-desc">Послушаем любимые треки</span>
+        </div>
+        <div class="option-card" onclick="toggleMainOption(this, 'talk')">
+          <span class="option-title">☕ Разговоры</span>
+          <span class="option-desc">Уютно поболтаем</span>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="width: 100%; margin-top: 6px; border-color: var(--primary);" onclick="startRandomizer()">
+        🎲 Довериться судьбе (Рулетка)
+      </button>
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="processMainStep()">Далее ➔</button>
+    </div>
+
+    <!-- ШАГ 2.1: ФИЛЬМЫ / СЕРИАЛЫ / АНИМЕ (С ПОИСКОМ) -->
+    <div id="stepMovies" class="step">
+      <h1>🎬 Что посмотрим вместе?</h1>
+      <p class="subtitle">Выбери настроение или впиши то, что давно хотела глянуть:</p>
+
+      <div class="grid-options">
+        <div class="option-card-featured" onclick="toggleSubOption(selectedMovies, 'Фильм: 1+1 (Мой приоритет ❤️)', this)">
+          <img src="assets/1+1.webp" alt="1+1" class="featured-img">
+          <div style="text-align: left;">
+            <span class="option-title" style="font-size: 0.9rem;">🍿 «1+1» (Мой выбор фильма!)</span>
+            <span class="option-desc">Душевная комедийная драма о дружбе и жизнелюбии</span>
+          </div>
+        </div>
+
+        <div class="option-card-featured" onclick="toggleSubOption(selectedMovies, 'Аниме: Унесённые призраками (Мой приоритет ❤️)', this)">
+          <img src="assets/veter.jpg" alt="Spirited Away" class="featured-img">
+          <div style="text-align: left;">
+            <span class="option-title" style="font-size: 0.9rem;">🌸 «Унесённые призраками»</span>
+            <span class="option-desc">Шедевр Миядзаки о волшебстве и храбрости</span>
+          </div>
+        </div>
+
+        <div class="option-card" onclick="toggleSubOption(selectedMovies, 'Настроение: Посмеяться от души 😂', this)">
+          <span class="option-title">😂 Комедия / Юмор</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedMovies, 'Настроение: Захватывающий сюжет 🕵️', this)">
+          <span class="option-title">🕵️ Триллер / Детектив</span>
+        </div>
+      </div>
+
+      <p class="subtitle" style="margin-bottom: 4px; margin-top: 10px; text-align: left;">🔍 Впиши свой фильм / сериал / аниме:</p>
+      <input type="text" id="customMovieInput" class="input-box" placeholder="Например: Интерстеллар, Атака Титанов...">
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="processMoviesStep()">Продолжить ➔</button>
+    </div>
+
+    <!-- ШАГ 2.2: ИГРЫ -->
+    <div id="stepGames" class="step">
+      <h1>🎮 Во что сыграем?</h1>
+      <p class="subtitle">Моя главная рекомендация или выбери другую:</p>
+
+      <div class="grid-options">
+        <div class="option-card-featured" onclick="toggleSubOption(selectedGames, 'It Takes Two (Мой приоритет ❤️)', this)">
+          <img src="assets/it_take_two.avif" alt="It Takes Two" class="featured-img">
+          <div style="text-align: left;">
+            <span class="option-title" style="font-size: 0.95rem;">✨ It Takes Two (Мой выбор!)</span>
+            <span class="option-desc">Лучшая кооперативная приключенческая игра для двоих</span>
+          </div>
+        </div>
+
+        <div class="option-card" onclick="toggleSubOption(selectedGames, 'Gartic Phone', this)">
+          <span class="option-title">✏️ Gartic Phone</span>
+          <span class="option-desc">Рисовалки</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedGames, 'Skribbl.io', this)">
+          <span class="option-title">🎨 Skribbl.io</span>
+          <span class="option-desc">Угадай рисунок</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedGames, 'Codenames', this)">
+          <span class="option-title">🕵️ Codenames</span>
+          <span class="option-desc">Ассоциации</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedGames, 'GeoGuessr', this)">
+          <span class="option-title">🌍 GeoGuessr</span>
+          <span class="option-desc">Карты мира</span>
+        </div>
+      </div>
+
+      <p class="subtitle" style="margin-bottom: 4px; margin-top: 10px; text-align: left;">Или предложи свой вариант игры:</p>
+      <input type="text" id="customGameInput" class="input-box" placeholder="Например: Minecraft, Roblox, CS...">
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="processGamesStep()">Продолжить ➔</button>
+    </div>
+
+    <!-- ШАГ 2.3: МУЗЫКА (С ВАЙБАМИ И ПОИСКОМ ТРЕКА) -->
+    <div id="stepMusic" class="step">
+      <h1>🎵 Какую музыку послушаем?</h1>
+      <p class="subtitle">Выбери вайб или впиши любимый трек/исполнителя:</p>
+
+      <div class="grid-options">
+        <div class="option-card" onclick="toggleSubOption(selectedMusic, 'Вайб: 🌙 Ночной Chill & Lofi', this)">
+          <span class="option-title">🌙 Ночной Chill</span>
+          <span class="option-desc">Уютно и расслабленно</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedMusic, 'Вайб: 🎸 Инди / Романтичный рок', this)">
+          <span class="option-title">🎸 Инди / Рок</span>
+          <span class="option-desc">Душевно с гитарами</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedMusic, 'Вайб: 🎧 Pop / R&B вайб', this)">
+          <span class="option-title">🎧 Pop / R&B</span>
+          <span class="option-desc">Легкий ритм</span>
+        </div>
+        <div class="option-card" onclick="toggleSubOption(selectedMusic, 'Вайб: 🕯️ Акустика и Джаз', this)">
+          <span class="option-title">🕯️ Акустика / Джаз</span>
+          <span class="option-desc">Как в кофейне</span>
+        </div>
+      </div>
+
+      <p class="subtitle" style="margin-bottom: 4px; margin-top: 10px; text-align: left;">🔍 Впиши песню или исполнителя (твой секретный акцент):</p>
+      <input type="text" id="customMusicInput" class="input-box" placeholder="Например: The Weeknd, Arctic Monkeys...">
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="processMusicStep()">Продолжить ➔</button>
+    </div>
+
+    <!-- ШАГ 3: ПЛАТФОРМА, ВРЕМЯ И КУПОНЫ -->
+    <div id="step3" class="step">
+      <h1>Где созвонимся и во сколько? 📱</h1>
+      
+      <p class="subtitle" style="margin-bottom: 6px; text-align: left;">Выбери удобный мессенджер:</p>
+      <div class="grid-options" style="margin-top: 4px;">
+        <div class="option-card selected" onclick="selectPlatform(this, 'Telegram')">
+          <span class="option-title">✈️ Telegram</span>
+        </div>
+        <div class="option-card" onclick="selectPlatform(this, 'Discord')">
+          <span class="option-title">👾 Discord</span>
+        </div>
+      </div>
+
+      <p class="subtitle" style="margin-bottom: 4px; margin-top: 10px; text-align: left;">Во сколько тебе удобно?</p>
+      <input type="text" id="timeInput" class="input-box" placeholder="Например: Сегодня в 20:00 или Завтра в 19:30">
+
+      <p class="subtitle" style="margin-bottom: 6px; margin-top: 12px; text-align: left;">🎟️ Выбери один праздничный купон:</p>
+      <div class="grid-options" style="margin-top: 2px;">
+        <div class="option-card" style="padding: 10px;" onclick="selectCoupon(this, 'Купон на вето (выбор фильма/игры без споров)')">
+          <span class="option-title" style="font-size: 0.78rem;">🎫 Право вето</span>
+          <span class="option-desc" style="font-size: 0.65rem;">Без споров</span>
+        </div>
+        <div class="option-card" style="padding: 10px;" onclick="selectCoupon(this, 'Купон на секретный кадр (сделать смешное лицо)')">
+          <span class="option-title" style="font-size: 0.78rem;">📸 Секретный кадр</span>
+          <span class="option-desc" style="font-size: 0.65rem;">Смешное лицо</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="goToStep(4)">Посмотреть результат ➔</button>
+    </div>
+
+    <!-- ШАГ 4: ФИНАЛ С BOARDING PASS -->
+    <div id="step4" class="step">
+      <div class="media-box">
+        <img src="assets/tom.gif" alt="Tom Playing Cello">
+      </div>
+      <h1>Месяц вместе! Билет готов! ✈️💖</h1>
+
+      <div class="boarding-pass" onclick="showToast('VIP Талон на созвон активирован! ✨')">
+        <div class="bp-header">
+          <span>✈️ Boarding Pass • 1 Month</span>
+          <span>VIP COZY</span>
+        </div>
+        <div class="bp-body">
+          <div>
+            <div class="bp-label">Пассажир</div>
+            <div class="bp-value">Любимая ✨</div>
+          </div>
+          <div>
+            <div class="bp-label">Рейс</div>
+            <div class="bp-value">#1MonthTogether</div>
+          </div>
+          <div>
+            <div class="bp-label">Время созвона</div>
+            <div class="bp-value" id="bpTimeText">Уточняется</div>
+          </div>
+          <div>
+            <div class="bp-label">Связь</div>
+            <div class="bp-value" id="bpPlatformText">Telegram</div>
+          </div>
+        </div>
+        <div class="bp-barcode">
+          II|lI|l|ll||l|l|I|l|
+        </div>
+      </div>
+      
+      <div id="tgNotice" class="tg-box" style="margin-top: 8px;">
+        📌 <strong>Как отправить ответ:</strong><br>
+        Нажми на кнопку отправки ниже! 🚀
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+        <button id="sendActionBtn" class="btn btn-primary" style="width: 100%; background: #0088cc;" onclick="sendResponse()">
+          Отправить ответ в Telegram ✈️
+        </button>
+        
+        <a id="calendarBtn" href="#" target="_blank" class="btn btn-secondary" style="width: 100%; display: none;">
+          Добавить созвон в Google Календарь 📅
+        </a>
+
+        <button class="btn btn-secondary" style="width: 100%;" onclick="openSecretEnvelope()">
+          Конвертик с секретом 💌
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast">Ты невероятная! ✨</div>
+
+  <!-- 3D КОНВЕРТ МОДАЛКА -->
+  <div id="envelopeModal" class="modal" onclick="closeSecretEnvelope(event)">
+    <div class="envelope-wrapper" id="envelopeObj" onclick="toggleEnvelope(event)">
+      <div class="envelope-flap"></div>
+      <div class="wax-seal">💖</div>
+      <div class="letter-paper">
+        <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; margin-bottom: 4px; border: 2px solid var(--primary);">
+          <img src="assets/lofi.gif" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <h3 style="font-family: 'Comfortaa'; margin-bottom: 2px; color:#fff; font-size:0.9rem;">Ровно 1 месяц! 🥂</h3>
+        <p style="font-size: 0.75rem; line-height: 1.3; color: #cbd5e1;">
+          Этот месяц пролетел незаметно, и каждый наш созвон — лучшее время дня. Спасибо, что ты есть у меня ✨
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- РУЛЕТКА МОДАЛКА -->
+  <div id="rouletteModal" class="roulette-overlay">
+    <div class="roulette-box">
+      <h2 style="font-family:'Comfortaa'; color:#fff; font-size:1.2rem;">Судьба выбирает... 🎲</h2>
+      <div id="slotDisplay" class="roulette-slot">Крутим...</div>
+      <button class="btn btn-primary" id="rouletteCloseBtn" style="display:none; width:100%;" onclick="closeRandomizer()">Перейти к выбору связи (Telegram / Discord) ➔</button>
+    </div>
+  </div>
+
+  <audio id="lofiAudio" loop src="https://stream.zeno.fm/f3wvbbqmdg8uv"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
